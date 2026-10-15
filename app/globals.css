@@ -1,0 +1,244 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: var(--font-barlow), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-oswald), ui-sans-serif, system-ui, sans-serif;
+
+  --color-navy: #101c2c;
+  --color-navy-deep: #0a121d;
+  --color-petrol: #163a4d;
+  --color-cream: #f2e6c9;
+  --color-cream-dark: #e2d3ae;
+  --color-gold: #d4a84f;
+  --color-gold-dark: #a9822f;
+  --color-urban: #526273;
+  --color-danger: #c94a45;
+  --color-warning: #e08a3e;
+
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+}
+
+:root {
+  color-scheme: dark;
+  --background: #101c2c;
+  --foreground: #f2e6c9;
+  --card: #163a4d;
+  --card-foreground: #f2e6c9;
+  --popover: #101c2c;
+  --popover-foreground: #f2e6c9;
+  --primary: #d4a84f;
+  --primary-foreground: #101c2c;
+  --secondary: #163a4d;
+  --secondary-foreground: #f2e6c9;
+  --muted: #1b2b3e;
+  --muted-foreground: #a9b4bf;
+  --accent: #163a4d;
+  --accent-foreground: #f2e6c9;
+  --destructive: #c94a45;
+  --border: rgba(212, 168, 79, 0.25);
+  --input: rgba(242, 230, 201, 0.15);
+  --ring: #d4a84f;
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-navy text-cream font-sans;
+  }
+}
+
+/* Table surface behind the board */
+.table-surface {
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(22, 58, 77, 0.55), transparent 65%),
+    radial-gradient(ellipse at 50% 120%, rgba(212, 168, 79, 0.08), transparent 60%),
+    repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.012) 0 2px, transparent 2px 7px),
+    #0a121d;
+}
+
+/* Board sizing — everything on the board scales from --board */
+.board-frame {
+  --board: min(calc(100dvh - 20px), calc(100vw - 16px));
+  --cell: calc(var(--board) / 10.2);
+  width: var(--board);
+  height: var(--board);
+}
+@media (min-width: 1024px) {
+  .board-frame {
+    --board: min(calc(100dvh - 28px), calc(100vw - 372px));
+  }
+}
+
+.board-grid {
+  display: grid;
+  grid-template-columns: 1.6fr repeat(7, 1fr) 1.6fr;
+  grid-template-rows: 1.6fr repeat(7, 1fr) 1.6fr;
+}
+
+.paper {
+  background-color: #f2e6c9;
+  background-image:
+    radial-gradient(rgba(16, 28, 44, 0.05) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.25), rgba(0, 0, 0, 0.04));
+  background-size: 4px 4px, 100% 100%;
+}
+
+.fs-tile-name { font-size: calc(var(--cell) * 0.108); line-height: 1.05; }
+.fs-tile-price { font-size: calc(var(--cell) * 0.13); }
+.fs-tile-tiny { font-size: calc(var(--cell) * 0.085); }
+.fs-corner { font-size: calc(var(--cell) * 0.15); line-height: 1; }
+.fs-center-title { font-size: calc(var(--cell) * 0.62); line-height: 0.9; }
+.fs-center-sub { font-size: calc(var(--cell) * 0.15); }
+.fs-center-body { font-size: calc(var(--cell) * 0.17); }
+
+.hazard-stripes {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(201, 74, 69, 0.85) 0 4px,
+    rgba(16, 28, 44, 0.85) 4px 8px
+  );
+}
+
+.text-shadow-strong { text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7), 0 1px 0 rgba(0, 0, 0, 0.6); }
+
+/* Animations */
+@keyframes hop {
+  0% { transform: translateY(0) scale(1); }
+  40% { transform: translateY(-38%) scale(1.08); }
+  100% { transform: translateY(0) scale(1); }
+}
+.animate-hop { animation: hop 260ms ease-out; }
+
+@keyframes dice-tumble {
+  0% { transform: rotate(0deg) translateY(0) scale(1); }
+  25% { transform: rotate(140deg) translateY(-18%) scale(1.1); }
+  50% { transform: rotate(260deg) translateY(4%) scale(0.95); }
+  75% { transform: rotate(340deg) translateY(-8%) scale(1.04); }
+  100% { transform: rotate(360deg) translateY(0) scale(1); }
+}
+.animate-dice { animation: dice-tumble 420ms linear infinite; }
+
+@keyframes dice-land {
+  0% { transform: scale(1.25); }
+  60% { transform: scale(0.94); }
+  100% { transform: scale(1); }
+}
+.animate-dice-land { animation: dice-land 320ms ease-out; }
+
+@keyframes smoke-rise {
+  0% { transform: translate(0, 0) scale(0.6); opacity: 0; }
+  20% { opacity: 0.55; }
+  100% { transform: translate(var(--drift, 20px), -140%) scale(1.9); opacity: 0; }
+}
+.smoke-puff {
+  position: absolute;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(82, 98, 115, 0.75), rgba(82, 98, 115, 0) 70%);
+  filter: blur(6px);
+  animation: smoke-rise var(--dur, 9s) ease-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes emergency-sweep {
+  0%, 100% { opacity: 0; }
+  45%, 55% { opacity: 1; }
+}
+.emergency-light { animation: emergency-sweep 1.6s ease-in-out infinite; }
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  45% { opacity: 0.85; }
+  48% { opacity: 0.4; }
+  52% { opacity: 0.9; }
+}
+.animate-flicker { animation: flicker 3.4s steps(1) infinite; }
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-ticker { animation: ticker 22s linear infinite; }
+
+@keyframes card-flip {
+  0% { transform: perspective(1200px) rotateY(180deg) translateY(30%) scale(0.6); opacity: 0; }
+  40% { opacity: 1; }
+  100% { transform: perspective(1200px) rotateY(0deg) translateY(0) scale(1); opacity: 1; }
+}
+.animate-card-flip { animation: card-flip 650ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+
+@keyframes deed-in {
+  0% { transform: translateY(40px) rotate(-6deg) scale(0.85); opacity: 0; }
+  100% { transform: translateY(0) rotate(-1.5deg) scale(1); opacity: 1; }
+}
+.animate-deed-in { animation: deed-in 450ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+
+@keyframes banner-sweep {
+  0% { transform: translateX(-110%); opacity: 0; }
+  18%, 78% { transform: translateX(0); opacity: 1; }
+  100% { transform: translateX(110%); opacity: 0; }
+}
+.animate-banner { animation: banner-sweep 1.5s cubic-bezier(0.6, 0, 0.3, 1) both; }
+
+@keyframes level-shake {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-6px, 3px); }
+  40% { transform: translate(5px, -4px); }
+  60% { transform: translate(-3px, 2px); }
+  80% { transform: translate(2px, -1px); }
+}
+.animate-shake { animation: level-shake 500ms ease-in-out; }
+
+@keyframes slow-zoom {
+  from { transform: scale(1.04); }
+  to { transform: scale(1.12); }
+}
+.animate-slow-zoom { animation: slow-zoom 24s ease-in-out infinite alternate; }
+
+@keyframes rise-in {
+  from { transform: translateY(18px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.animate-rise { animation: rise-in 700ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+
+@keyframes coin-pop {
+  0% { transform: translateY(6px) scale(0.8); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translateY(-14px) scale(1); opacity: 0; }
+}
+.animate-coin-pop { animation: coin-pop 1.2s ease-out both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
